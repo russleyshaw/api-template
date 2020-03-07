@@ -1,0 +1,5 @@
+{
+    "exec": "yarn dev",
+    "watch": ["src", "schema.graphql"],
+    "ext": "ts"
+}
