@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction, ErrorRequestHandler, RequestHandler } from "express";
-import logger from "./logger";
+import logger from "../logger";
 import createHttpError from "http-errors";
 
 export const logging: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {

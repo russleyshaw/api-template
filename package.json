@@ -28,7 +28,6 @@
     },
     "scripts": {
         "dev": "ts-node ./src/main.ts",
-        "watch": "nodemon",
-        "generate": "graphql-codegen --config codegen.yml"
+        "nodemon": "nodemon"
     }
 }

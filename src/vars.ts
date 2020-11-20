@@ -1,16 +1,9 @@
-/**
- * Application variables
- */
-
 import * as dotenv from "dotenv";
-import { asNumber } from "./util";
-import * as path from "path";
-
 dotenv.config();
 
-export const PORT = asNumber(process.env.PORT ?? 3000, { integer: true, parse: true });
+import * as path from "path";
+import { safeParseInt } from "./utils/parse";
+
+export const PORT = safeParseInt(process.env.PORT) ?? 3000;
 export const LOG_FILE = process.env.LOG_FILE ?? "app.log";
-
 export const PROJECT_ROOT = path.join(__dirname, "../");
-
-export const SCHEMA_FILE = path.join(PROJECT_ROOT, "schema.graphql");
