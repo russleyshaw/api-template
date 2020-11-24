@@ -1,12 +1,12 @@
-import { Response, Request, NextFunction, ErrorRequestHandler, RequestHandler } from "express";
 import logger from "../logger";
 import createHttpError from "http-errors";
+import { NextFunction, ErrorRequestHandler, Request, Response } from "express";
 
-export const logging: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
+export const logging = (req: Request, res: Response, next: NextFunction): void => {
     logger.info(`Got ${req.method} ${req.url} from ${req.ip}`, {
         method: req.method,
         url: req.url,
-        ip: req.ip
+        ip: req.ip,
     });
     next();
 };
@@ -34,7 +34,7 @@ export const error: ErrorRequestHandler = (
     res.status(httpErr.status).json({
         code: httpErr.status,
         name: httpErr.name,
-        message: httpErr.message
+        message: httpErr.message,
     });
 
     next();
