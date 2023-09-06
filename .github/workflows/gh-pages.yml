@@ -42,6 +42,7 @@ jobs:
               uses: Legion2/swagger-ui-action@v1
               with:
                   output: dist/docs/
+                  spec-file: ./dist/docs/swagger.json
             - name: Build
               run: npm run export:swagger -- ./dist/docs/swagger.json
             - name: Setup Pages
