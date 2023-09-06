@@ -37,13 +37,14 @@ jobs:
                   cache: "npm"
             - name: Install dependencies
               run: npm install
-            - name: Build
-              run: npm run export:swagger -- dist/docs/swagger.json
+
             - name: Generate Swagger UI
               uses: Legion2/swagger-ui-action@v1
               with:
                   output: dist/docs/
-                  spec-file: dist/docs/swagger.json
+                  spec-file: ./swagger.json
+            - name: Build
+              run: npm run export:swagger -- ./swagger.json
             - name: Setup Pages
               uses: actions/configure-pages@v3
             - name: Upload artifact
