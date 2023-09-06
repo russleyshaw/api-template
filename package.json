@@ -8,7 +8,9 @@
         "dev": "ts-node-esm src/main.ts",
         "dev:watch": "nodemon",
         "db:migrate": "prisma migrate dev",
-        "db:generate": "prisma generate"
+        "db:generate": "prisma generate",
+        "postinstall": "npm run db:generate",
+        "export:swagger": "ts-node-esm src/scripts/export_swagger.ts"
     },
     "author": "",
     "license": "MIT",

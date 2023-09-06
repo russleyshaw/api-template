@@ -9,3 +9,5 @@ const server = await createServer();
 await registerControllers(server);
 
 await server.listen({ port: APP_PORT });
+
+export { server };
