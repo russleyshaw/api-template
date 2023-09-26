@@ -23,7 +23,19 @@ export default new Elysia()
             },
         })
     )
-    .derive(() => {
-        return { log: LOGGER.child({}) };
+    .derive(({ headers }) => {
+        const requestId = headers["x-request-id"] ?? "REQ ID";
+        return { requestId };
     })
+
+    .derive(() => ({ log: LOGGER.child({}) }))
+    .onAfterHandle(({ request, requestId, set }) => {
+        LOGGER.debug({
+            method: request.method,
+            url: request.url,
+        });
+
+        set.headers["x-request-id"] = requestId;
+    })
+
     .use(schemas);

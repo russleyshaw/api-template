@@ -5,8 +5,7 @@ import { CONFIG } from "../config";
 import base from "../server/base";
 
 LOGGER.debug("Registering common controllers");
-export default new Elysia()
-    .use(base)
+export default base
     .get(
         "/ping",
         async () => {

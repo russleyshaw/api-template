@@ -6,12 +6,10 @@ import schemas from "../schemas";
 import base from "../server/base";
 
 LOGGER.debug("Registering example controllers");
-export default new Elysia()
-    .use(schemas)
-    .use(base)
+export default base
     .post(
         "/user",
-        async ({ body, log }) => {
+        async ({ body }) => {
             const db = await getDbClient();
             const createdUser = await db.user.create({
                 data: {
