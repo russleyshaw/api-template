@@ -1,17 +1,7 @@
-import { logger } from "../logger.js";
-import type { AppServer } from "../server.js";
-import { registerExampleController } from "./example.js";
-import { registerCommonController } from "./general.js";
+import { Elysia } from "elysia";
+import common from "./common";
+import example from "./example";
+import { LOGGER } from "../logger";
 
-export async function registerControllers(server: AppServer) {
-    logger.info("Registering controllers");
-
-    await registerCommonController(server);
-
-    // Add new controllers here.
-    await registerExampleController(server);
-
-    logger.info("Controllers registered");
-
-    return server;
-}
+LOGGER.debug("Registering controllers");
+export default new Elysia().use(common).use(example);

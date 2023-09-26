@@ -1,38 +1,34 @@
-import dotenv from "dotenv";
-dotenv.config();
+import { Type } from "@sinclair/typebox";
+import { encodeWithDefaults } from "./lib/typebox";
+import pkgJson from "../package.json";
 
-import PACKAGE_JSON from "../package.json" assert { type: "json" };
+const CONFIG_SCHEMA = Type.Object({
+    port: Type.Number({
+        minimum: 1,
+        maximum: 65535,
+        default: 3000,
+        description: "Application port",
+    }),
 
-export const APP_PORT = expectEnvInt("APP_PORT", 3000);
+    devMode: Type.Boolean({
+        default: false,
+        description: "Development mode",
+    }),
+});
 
-export const IS_DEV_MODE = expectEnv("NODE_ENV", "production") === "development";
-
-export const APP_NAME = PACKAGE_JSON.name;
-export const APP_VERSION = PACKAGE_JSON.version;
-export const APP_DESCRIPTION = PACKAGE_JSON.description;
-
-export const APP_AUTHOR_NAME = PACKAGE_JSON.author;
-export const APP_AUTHOR_EMAIL = undefined;
-
-function expectEnv(name: string, defaultValue: string): string {
-    const value = process.env[name];
-    if (value === undefined) {
-        return defaultValue;
-    }
-
-    return value;
+async function readConfig(configPath: string) {
+    const config = Bun.file(configPath);
+    const configData = await config.json();
+    const encoded = encodeWithDefaults(CONFIG_SCHEMA, configData);
+    return {
+        ...encoded,
+        appName: pkgJson.name,
+        appDisplayName: pkgJson.displayName,
+        appVersion: pkgJson.version,
+        appDescription: pkgJson.description,
+        appAuthorName: pkgJson.author.name,
+        appAuthorEmail: pkgJson.author.email,
+    };
 }
 
-function expectEnvInt(name: string, defaultValue: number): number {
-    const value = process.env[name];
-    if (value === undefined) {
-        return defaultValue;
-    }
-
-    const parsed = parseInt(value);
-    if (isNaN(parsed)) {
-        throw new Error(`Invalid value for ${name}: ${value}`);
-    }
-
-    return parsed;
-}
+export const CONFIG = await readConfig("./conf/config.json");

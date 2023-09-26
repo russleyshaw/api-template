@@ -1,8 +1,8 @@
 import pino from "pino";
-import { IS_DEV_MODE } from "./config.js";
+import { CONFIG } from "./config";
 
-export const logger = pino.pino({
-    transport: IS_DEV_MODE
+export const LOGGER = pino({
+    transport: CONFIG.devMode
         ? {
               target: "pino-pretty",
               options: {
@@ -11,5 +11,5 @@ export const logger = pino.pino({
               },
           }
         : undefined,
-    level: IS_DEV_MODE ? "debug" : "info",
+    level: CONFIG.devMode ? "debug" : "info",
 });

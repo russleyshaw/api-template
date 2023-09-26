@@ -1,13 +1,8 @@
-import { APP_PORT } from "./config.js";
-import { registerControllers } from "./controllers/index.js";
+import { CONFIG } from "./config";
+import { LOGGER } from "./logger";
 
-import { createServer } from "./server.js";
+import server from "./server";
 
-const server = await createServer();
-
-// Import all controllers after server.
-await registerControllers(server);
-
-await server.listen({ port: APP_PORT });
-
-export { server };
+server.listen(CONFIG.port, server => {
+    LOGGER.info(`🦊 Elysia is running at ${server?.hostname}:${server?.port}`);
+});
