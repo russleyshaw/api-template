@@ -1,4 +1,8 @@
 {
     "port": 3000,
-    "devMode": true
+    "devMode": true,
+
+    "db": {
+        "type": "postgres"
+    }
 }

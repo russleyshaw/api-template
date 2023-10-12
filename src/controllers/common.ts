@@ -1,4 +1,3 @@
-import { Elysia, t } from "elysia";
 import { COMMON_TAG } from "../tags";
 import { LOGGER } from "../logger";
 import { CONFIG } from "../config";
@@ -16,16 +15,21 @@ export default base
             detail: {
                 tags: [COMMON_TAG.name],
             },
-        }
+        },
     )
     .get(
         "/info",
-        () => {
+        ({ log }) => {
+            log.info("Info endpoint called");
             return {
                 name: CONFIG.appName,
                 description: CONFIG.appDescription,
                 version: CONFIG.appVersion,
+                author: {
+                    name: CONFIG.appAuthorName,
+                    email: CONFIG.appAuthorEmail,
+                },
             };
         },
-        { detail: { tags: [COMMON_TAG.name] } }
+        { detail: { tags: [COMMON_TAG.name] } },
     );

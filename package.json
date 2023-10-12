@@ -1,33 +1,38 @@
 {
-    "name": "api-template",
-    "version": "1.0.50",
-    "displayName": "API Template",
-    "description": "API Template",
-    "author": {
-        "name": "Russley Shaw",
-        "email": "russleyshaw@gmail.com"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "bun run --watch src/main.ts",
-        "dev:watch": "bunx nodemon",
-        "gen:db": "bunx prisma generate"
-    },
-    "dependencies": {
-        "@elysiajs/swagger": "^0.7.2",
-        "@prisma/client": "5.3.1",
-        "@sinclair/typebox": "^0.31.16",
-        "elysia": "latest",
-        "lodash": "^4.17.21",
-        "pino": "^8.15.1",
-        "pino-pretty": "^10.2.0",
-        "prisma": "^5.3.1"
-    },
-    "devDependencies": {
-        "bun-types": "latest"
-    },
-    "module": "src/main.js",
-    "volta": {
-        "node": "18.18.0"
-    }
+  "name": "api-template",
+  "version": "1.0.50",
+  "displayName": "API Template",
+  "description": "API Template",
+  "author": {
+    "name": "Russley Shaw",
+    "email": "russleyshaw@gmail.com"
+  },
+  "scripts": {
+    "start": "bun run src/main.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/main.ts",
+    "generate:db": "bunx prisma generate",
+    "db:migrate": "bunx prisma migrate dev"
+  },
+  "dependencies": {
+    "@elysiajs/eden": "^0.7.4",
+    "@elysiajs/swagger": "^0.7.2",
+    "@prisma/client": "5.3.1",
+    "@sinclair/typebox": "^0.31.16",
+    "amqplib": "^0.10.3",
+    "elysia": "latest",
+    "http-errors": "^2.0.0",
+    "lodash": "^4.17.21",
+    "pino": "^8.15.1",
+    "pino-pretty": "^10.2.0",
+    "prisma": "^5.3.1"
+  },
+  "devDependencies": {
+    "@types/http-errors": "^2.0.2",
+    "bun-types": "latest"
+  },
+  "module": "src/main.js",
+  "volta": {
+    "node": "18.18.0"
+  }
 }

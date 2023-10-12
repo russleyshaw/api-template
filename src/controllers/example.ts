@@ -1,9 +1,8 @@
-import { Elysia, t } from "elysia";
 import { getDbClient } from "../db";
-import { EXAMPLE_TAG } from "../tags";
 import { LOGGER } from "../logger";
-import schemas from "../schemas";
 import base from "../server/base";
+import { EXAMPLE_TAG } from "../tags";
+import createError from "http-errors";
 
 LOGGER.debug("Registering example controllers");
 export default base
@@ -11,17 +10,30 @@ export default base
         "/user",
         async ({ body }) => {
             const db = await getDbClient();
+
+            const foundUser = await db.user.findUnique({
+                where: {
+                    name: body.name,
+                },
+            });
+
+            if (foundUser) {
+                throw createError(409, `User with name (${body.name}) already exists`);
+            }
+
             const createdUser = await db.user.create({
                 data: {
                     name: body.name,
                     email: body.email,
+                    language: body.language,
                 },
             });
 
             return {
                 id: createdUser.id,
                 name: createdUser.name,
-                email: createdUser.email ?? undefined,
+                email: createdUser.email ?? "",
+                language: createdUser.language ?? "",
             };
         },
         {
@@ -32,7 +44,7 @@ export default base
                 description: "Create new user",
                 tags: [EXAMPLE_TAG.name],
             },
-        }
+        },
     )
     .get(
         "/user",
@@ -41,8 +53,9 @@ export default base
             const foundUsers = await db.user.findMany();
             return foundUsers.map(user => ({
                 id: user.id,
-                email: user.email ?? undefined,
+                email: user.email ?? "",
                 name: user.name,
+                language: user.language ?? "",
             }));
         },
         {
@@ -52,5 +65,5 @@ export default base
                 description: "Get all users",
                 tags: [EXAMPLE_TAG.name],
             },
-        }
+        },
     );

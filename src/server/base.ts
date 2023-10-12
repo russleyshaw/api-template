@@ -1,12 +1,13 @@
+import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
-import controllers from "../controllers";
+import { isHttpError } from "http-errors";
 import { CONFIG } from "../config";
 import { LOGGER } from "../logger";
-import swagger from "@elysiajs/swagger";
-import { ALL_TAGS } from "../tags";
 import schemas from "../schemas";
+import { ALL_TAGS } from "../tags";
+import logger from "./plugins/logger";
 
-export default new Elysia()
+const baseServer = new Elysia()
     .use(
         swagger({
             documentation: {
@@ -21,14 +22,13 @@ export default new Elysia()
                 },
                 tags: [...ALL_TAGS],
             },
-        })
+        }),
     )
     .derive(({ headers }) => {
         const requestId = headers["x-request-id"] ?? "REQ ID";
         return { requestId };
     })
-
-    .derive(() => ({ log: LOGGER.child({}) }))
+    .use(logger)
     .onAfterHandle(({ request, requestId, set }) => {
         LOGGER.debug({
             method: request.method,
@@ -37,5 +37,21 @@ export default new Elysia()
 
         set.headers["x-request-id"] = requestId;
     })
+    .onError(({ code, error }) => {
+        const errorText = error.toString();
+
+        if (code === "INTERNAL_SERVER_ERROR") {
+            LOGGER.error(errorText);
+        }
+
+        if (isHttpError(error)) {
+            return new Response(error.message, { status: error.status });
+        }
+
+        return new Response(error.toString());
+    })
 
     .use(schemas);
+
+export default baseServer;
+export type BaseServer = typeof baseServer;
