@@ -1,8 +1,13 @@
 {
-    "port": 3000,
-    "devMode": true,
-
     "db": {
         "type": "postgres"
+    },
+
+    "links": {
+        "homepage": "https://github.com/russleyshaw/api-template",
+        "issues": "https://github.com/russleyshaw/api-template/issues",
+        "build": "https://github.com/russleyshaw/api-template/actions",
+        "documentation": "https://localhost:3000/docs",
+        "source": "https://github.com/russleyshaw/api-template"
     }
 }

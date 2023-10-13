@@ -3,9 +3,9 @@ import { Elysia } from "elysia";
 import { isHttpError } from "http-errors";
 import { CONFIG } from "../config";
 import { LOGGER } from "../logger";
-import schemas from "../schemas";
 import { ALL_TAGS } from "../tags";
 import logger from "./plugins/logger";
+import models from "./plugins/models";
 
 const baseServer = new Elysia()
     .use(
@@ -51,7 +51,7 @@ const baseServer = new Elysia()
         return new Response(error.toString());
     })
 
-    .use(schemas);
+    .use(models);
 
 export default baseServer;
 export type BaseServer = typeof baseServer;

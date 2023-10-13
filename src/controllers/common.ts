@@ -19,7 +19,7 @@ export default base
     )
     .get(
         "/info",
-        ({ log }) => {
+        async ({ log }) => {
             log.info("Info endpoint called");
             return {
                 name: CONFIG.appName,
@@ -29,7 +29,8 @@ export default base
                     name: CONFIG.appAuthorName,
                     email: CONFIG.appAuthorEmail,
                 },
+                links: CONFIG.links,
             };
         },
-        { detail: { tags: [COMMON_TAG.name] } },
+        { response: "info", detail: { tags: [COMMON_TAG.name] } },
     );

@@ -1,25 +1,10 @@
 import { Static, Type } from "@sinclair/typebox";
 import { encodeWithDefaults } from "./lib/typebox";
 import pkgJson from "../package.json";
+import { LINKS_SCHEMA } from "./schemas/common";
 
 const POSTGRES_DB_CONFIG_SCHEMA = Type.Object({
     type: Type.Literal("postgres"),
-    host: Type.String({
-        description: "Database host",
-        default: process.env.DB_HOST ?? "localhost",
-    }),
-    username: Type.String({
-        description: "Database username",
-        default: process.env.DB_USERNAME ?? "postgres",
-    }),
-    password: Type.String({
-        description: "Database password",
-        default: process.env.DB_PASSWORD ?? "postgres",
-    }),
-    database: Type.String({
-        description: "Database name",
-        default: process.env.DB_DATABASE ?? "postgres",
-    }),
 });
 
 const SQLITE_DB_CONFIG_SCHEMA = Type.Object({
@@ -57,11 +42,14 @@ const CONFIG_SCHEMA = Type.Object({
     }),
 
     db: DB_CONFIG_SCHEMA,
+
+    links: LINKS_SCHEMA,
 });
 
 async function readConfig(configPath: string) {
     const config = Bun.file(configPath);
     const configData = await config.json();
+
     const encoded = encodeWithDefaults(CONFIG_SCHEMA, configData);
     return {
         ...encoded,

@@ -1,8 +1,6 @@
-import Elysia from "elysia";
 import { Type } from "@sinclair/typebox";
-import { LOGGER } from "../logger";
 
-const NEW_USER_SCHEMA = Type.Object(
+export const NEW_USER_SCHEMA = Type.Object(
     {
         name: Type.String({
             description: "User name",
@@ -24,7 +22,7 @@ const NEW_USER_SCHEMA = Type.Object(
     },
 );
 
-const USER_SCHEMA = Type.Composite(
+export const USER_SCHEMA = Type.Composite(
     [
         Type.Required(NEW_USER_SCHEMA),
         Type.Object({
@@ -39,10 +37,7 @@ const USER_SCHEMA = Type.Composite(
     },
 );
 
-LOGGER.debug("Registering example schemas");
-export default new Elysia().model({
-    // Example
-    user: USER_SCHEMA,
-    newUser: NEW_USER_SCHEMA,
-    userList: Type.Array(USER_SCHEMA, { title: "UserList", description: "List of users" }),
+export const USER_LIST_SCHEMA = Type.Array(USER_SCHEMA, {
+    title: "UserList",
+    description: "List of users",
 });
