@@ -1,26 +1,13 @@
 import { COMMON_TAG } from "../tags";
-import { LOGGER } from "../logger";
 import { CONFIG } from "../config";
-import base from "../server/base";
+import Elysia from "elysia";
+import setup from "../server/setup";
 
-LOGGER.debug("Registering common controllers");
-export default base
-    .get(
-        "/ping",
-        async () => {
-            return { pong: "pong" };
-        },
-        {
-            response: "pong",
-            detail: {
-                tags: [COMMON_TAG.name],
-            },
-        },
-    )
+export default new Elysia()
+    .use(setup)
     .get(
         "/info",
-        async ({ log }) => {
-            log.info("Info endpoint called");
+        async () => {
             return {
                 name: CONFIG.appName,
                 description: CONFIG.appDescription,
@@ -32,5 +19,26 @@ export default base
                 links: CONFIG.links,
             };
         },
-        { response: "info", detail: { tags: [COMMON_TAG.name] } },
+        {
+            response: "INFO_SCHEMA",
+            detail: {
+                summary: "Get service info",
+                description: "Get service info",
+                tags: [COMMON_TAG.name],
+            },
+        }
+    )
+    .get(
+        "/ping",
+        async () => {
+            return { pong: "pong" };
+        },
+        {
+            response: "PONG_SCHEMA",
+            detail: {
+                summary: "Ping",
+                description: "Ping the server",
+                tags: [COMMON_TAG.name],
+            },
+        }
     );

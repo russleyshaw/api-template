@@ -1,50 +1,68 @@
-import { TSchema, Type, TypeGuard } from "@sinclair/typebox";
-import { TypeCheck } from "@sinclair/typebox/compiler";
+import { t } from "elysia";
 
-export const PONG_SCHEMA = Type.Object(
+export const PONG_SCHEMA = t.Object(
     {
-        pong: Type.String({
+        pong: t.String({
             description: "Pong message",
         }),
     },
     {
-        title: "Pong",
+        title: "Common.Pong",
         description: "Pong message",
-    },
+    }
 );
 
-const LinkSchema = (description: string) => Type.String({ description });
+const LinkSchema = (description: string) => t.String({ description });
 
-export const LINKS_SCHEMA = Type.Object({
-    homepage: LinkSchema("Homepage of the service"),
-    issues: LinkSchema("Issues of the service"),
-    build: LinkSchema("Build of the service"),
-    documentation: LinkSchema("Docs of the service"),
-    source: LinkSchema("Source of the service"),
-});
+export const LINKS_SCHEMA = t.Object(
+    {
+        wiki: LinkSchema("Source of the service"),
+        homepage: LinkSchema("Homepage of the service"),
+        issues: LinkSchema("Issues of the service"),
+        build: LinkSchema("Build of the service"),
+        documentation: LinkSchema("Docs of the service"),
+        source: LinkSchema("Source of the service"),
+    },
+    {
+        title: "Common.Links",
+        description: "Links of the service",
+    }
+);
 
-export const INFO_SCHEMA = Type.Object({
-    name: Type.String({
-        description: "Name of the service",
-    }),
-
-    version: Type.String({
-        description: "Version of the service",
-    }),
-
-    description: Type.String({
-        description: "Description of the service",
-    }),
-
-    author: Type.Object({
-        name: Type.String({
-            description: "Author name",
+export const INFO_SCHEMA = t.Object(
+    {
+        name: t.String({
+            description: "Name of the service",
         }),
 
-        email: Type.String({
-            description: "Author email",
+        version: t.String({
+            description: "Version of the service",
         }),
-    }),
 
-    links: LINKS_SCHEMA,
-});
+        description: t.String({
+            description: "Description of the service",
+        }),
+
+        author: t.Object({
+            name: t.String({
+                description: "Author name",
+            }),
+
+            email: t.String({
+                description: "Author email",
+            }),
+        }),
+
+        links: LINKS_SCHEMA,
+    },
+    {
+        title: "Common.Info",
+        description: "Information about the service",
+    }
+);
+
+export const COMMON_SCHEMAS = {
+    PONG_SCHEMA,
+    LINKS_SCHEMA,
+    INFO_SCHEMA,
+};

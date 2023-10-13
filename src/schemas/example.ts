@@ -1,43 +1,49 @@
-import { Type } from "@sinclair/typebox";
+import { t } from "elysia";
 
-export const NEW_USER_SCHEMA = Type.Object(
+export const NEW_USER_SCHEMA = t.Object(
     {
-        name: Type.String({
+        name: t.String({
             description: "User name",
         }),
-        email: Type.Optional(
-            Type.String({
+        email: t.Optional(
+            t.String({
                 description: "User email",
-            }),
+            })
         ),
-        language: Type.Optional(
-            Type.String({
+        language: t.Optional(
+            t.String({
                 description: "User language",
-            }),
+            })
         ),
     },
     {
-        title: "NewUser",
+        title: "Example.NewUser",
         description: "New user information",
-    },
+    }
 );
 
-export const USER_SCHEMA = Type.Composite(
+export const USER_SCHEMA = t.Composite(
     [
-        Type.Required(NEW_USER_SCHEMA),
-        Type.Object({
-            id: Type.Integer({
+        t.Required(NEW_USER_SCHEMA),
+        t.Object({
+            id: t.Integer({
                 description: "User ID",
             }),
         }),
     ],
     {
-        title: "User",
+        title: "Example.User",
         description: "User information",
-    },
+    }
 );
 
-export const USER_LIST_SCHEMA = Type.Array(USER_SCHEMA, {
-    title: "UserList",
+export const USER_LIST_SCHEMA = t.Array(USER_SCHEMA, {
+    title: "Example.UserList",
     description: "List of users",
 });
+
+export const EXAMPLE_SCHEMAS = {
+    NEW_USER_SCHEMA,
+    USER_SCHEMA,
+    USER_LIST_SCHEMA,
+};

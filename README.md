@@ -1,15 +1,15 @@
-# Elysia with Bun runtime
+# API Template
 
-## Getting Started
-To get started with this template, simply paste this command into your terminal:
-```bash
-bun create elysia ./elysia-example
-```
+## Developing
 
-## Development
-To start the development server run:
-```bash
-bun run dev
-```
+### Setup
+- (On Windows) Install WSL2
+- Install [Bun](https://bun.sh/)
 
-Open http://localhost:3000/ with your browser to see the result.
+### Adding new endpoints.
+
+- Add new controller file to `src/controllers/`
+- Add schemas to `src/schemas/`
+- Add exported schemas to `src/server/plugins/models.ts`
+
+

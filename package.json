@@ -2,7 +2,7 @@
   "name": "api-template",
   "version": "1.0.50",
   "displayName": "API Template",
-  "description": "API Template",
+  "description": "A template for creating REST APIs with ElysiaJS",
   "author": {
     "name": "Russley Shaw",
     "email": "russleyshaw@gmail.com"

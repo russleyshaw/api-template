@@ -6,7 +6,7 @@ export const EXAMPLE_TAG = createTag("Example", "Example service");
 export const ALL_TAGS = [
     COMMON_TAG,
 
-    // Add more tags here
+    // EDITME: Add more tags here
     EXAMPLE_TAG,
 ];
 

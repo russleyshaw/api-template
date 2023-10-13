@@ -2,46 +2,25 @@ import { Static, Type } from "@sinclair/typebox";
 import { encodeWithDefaults } from "./lib/typebox";
 import pkgJson from "../package.json";
 import { LINKS_SCHEMA } from "./schemas/common";
-
-const POSTGRES_DB_CONFIG_SCHEMA = Type.Object({
-    type: Type.Literal("postgres"),
-});
-
-const SQLITE_DB_CONFIG_SCHEMA = Type.Object({
-    type: Type.Literal("sqlite"),
-    path: Type.String({
-        description: "Database path",
-        default: process.env.DB_PATH ?? "./dev.sqlite",
-    }),
-});
-
-const DB_CONFIG_SCHEMA = Type.Union([POSTGRES_DB_CONFIG_SCHEMA, SQLITE_DB_CONFIG_SCHEMA]);
-
-export type DbConfig = Static<typeof DB_CONFIG_SCHEMA>;
-
-const REDIS_CONFIG_SCHEMA = Type.Object({
-    host: Type.String({
-        description: "Redis host",
-        default: process.env.REDIS_HOST ?? "localhost",
-    }),
-});
-
-export type CacheConfig = Static<typeof REDIS_CONFIG_SCHEMA>;
+import { safeParseInt } from "./lib/util";
 
 const CONFIG_SCHEMA = Type.Object({
     port: Type.Number({
         minimum: 1,
         maximum: 65535,
-        default: 3000,
+        default: safeParseInt(Bun.env.PORT, 3000),
         description: "Application port",
     }),
 
-    devMode: Type.Boolean({
-        default: process.env.NODE_ENV === "development",
-        description: "Development mode",
+    hostname: Type.String({
+        default: Bun.env.HOSTNAME ?? "localhost",
+        description: "Application hostname",
     }),
 
-    db: DB_CONFIG_SCHEMA,
+    devMode: Type.Boolean({
+        default: Bun.env.NODE_ENV === "development",
+        description: "Development mode",
+    }),
 
     links: LINKS_SCHEMA,
 });
