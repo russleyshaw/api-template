@@ -3,25 +3,28 @@ import Elysia from "elysia";
 import { CONFIG } from "../../config";
 import * as md from "../../lib/markdown";
 import { ALL_TAGS } from "../../tags";
+import debug from "./debug";
 
-// TODO: Swagger fails when exported as a function. Change this to a function when it's fixed.
-export default async function () {
-    return swagger({
-        documentation: {
-            info: {
-                title: CONFIG.appDisplayName,
-                version: CONFIG.appVersion,
-                contact: {
-                    name: CONFIG.appAuthorName,
-                    email: CONFIG.appAuthorEmail,
+const description = await getSwaggerDescription();
+export default (app: Elysia) => {
+    return app.use(debug("Plugin: Setting up swagger")).use(
+        swagger({
+            documentation: {
+                info: {
+                    title: CONFIG.appDisplayName,
+                    version: CONFIG.appVersion,
+                    contact: {
+                        name: CONFIG.appAuthorName,
+                        email: CONFIG.appAuthorEmail,
+                    },
+                    description,
                 },
-                description: await getSwaggerDescription(),
-            },
 
-            tags: ALL_TAGS,
-        },
-    });
-}
+                tags: ALL_TAGS,
+            },
+        }),
+    );
+};
 
 async function getSwaggerDescription() {
     const readmeFile = Bun.file("./README.md");

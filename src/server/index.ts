@@ -1,11 +1,5 @@
-import { Elysia } from "elysia";
-import logger from "./plugins/logger";
-import models from "./plugins/models";
-import requestId from "./plugins/request_id";
-import errors from "./plugins/errors";
-
 import controllers from "../controllers";
-import setup from "./setup";
-import swagger from "./plugins/swagger";
+import base from "./base";
+import debug from "./plugins/debug";
 
-export default new Elysia().use(swagger()).use(setup).use(controllers);
+export default base.use(debug("Finalizing server")).use(controllers);

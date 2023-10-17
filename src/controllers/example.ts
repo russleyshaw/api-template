@@ -1,11 +1,11 @@
-import Elysia from "elysia";
-import { getDbClient } from "../db";
-import { EXAMPLE_TAG } from "../tags";
 import createError from "http-errors";
-import setup from "../server/setup";
+import { getDbClient } from "../db";
+import base from "../server/base";
+import log from "../server/plugins/debug";
+import { EXAMPLE_TAG } from "../tags";
 
-export default new Elysia()
-    .use(setup)
+export default base
+    .use(log("Setting up example controller"))
     .get(
         "/user",
         async () => {
@@ -25,7 +25,7 @@ export default new Elysia()
                 description: "Get all users",
                 tags: [EXAMPLE_TAG.name],
             },
-        }
+        },
     )
     .post(
         "/user",
@@ -65,5 +65,5 @@ export default new Elysia()
                 description: "Create new user",
                 tags: [EXAMPLE_TAG.name],
             },
-        }
+        },
     );

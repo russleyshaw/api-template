@@ -1,7 +1,5 @@
-import Elysia from "elysia";
 import { CONFIG } from "./config";
 import { LOGGER } from "./logger";
-import swagger from "@elysiajs/swagger";
 
 if (CONFIG.devMode) {
     LOGGER.warn("🦊 Elysia is running in development mode");
@@ -9,10 +7,15 @@ if (CONFIG.devMode) {
 
 import server from "./server";
 
-export default server.listen({
-    hostname: CONFIG.hostname,
-    port: CONFIG.port,
-});
+export default server.listen(
+    {
+        hostname: CONFIG.hostname,
+        port: CONFIG.port,
+    },
+    () => {
+        LOGGER.info(`🦊 Elysia is listening on ${CONFIG.hostname}:${CONFIG.port}`);
+    },
+);
 
 process.on("SIGINT", () => {
     LOGGER.warn("🦊 Elysia is shutting down");

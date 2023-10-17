@@ -1,10 +1,10 @@
-import { COMMON_TAG } from "../tags";
 import { CONFIG } from "../config";
-import Elysia from "elysia";
-import setup from "../server/setup";
+import base from "../server/base";
+import log from "../server/plugins/debug";
+import { COMMON_TAG } from "../tags";
 
-export default new Elysia()
-    .use(setup)
+export default base
+    .use(log("Setting up common controllers"))
     .get(
         "/info",
         async () => {
@@ -26,7 +26,7 @@ export default new Elysia()
                 description: "Get service info",
                 tags: [COMMON_TAG.name],
             },
-        }
+        },
     )
     .get(
         "/ping",
@@ -40,5 +40,5 @@ export default new Elysia()
                 description: "Ping the server",
                 tags: [COMMON_TAG.name],
             },
-        }
+        },
     );
