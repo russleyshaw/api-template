@@ -1,4 +1,4 @@
-import { Static, Type } from "@sinclair/typebox";
+import { Type } from "@sinclair/typebox";
 import { encodeWithDefaults } from "./lib/typebox";
 import pkgJson from "../package.json";
 import { LINKS_SCHEMA } from "./schemas/common";
@@ -10,6 +10,12 @@ const CONFIG_SCHEMA = Type.Object({
         maximum: 65535,
         default: safeParseInt(Bun.env.PORT, 3000),
         description: "Application port",
+    }),
+    testPort: Type.Number({
+        minimum: 1,
+        maximum: 65535,
+        default: safeParseInt(Bun.env.TEST_PORT, 3001),
+        description: "Application test port",
     }),
 
     hostname: Type.String({

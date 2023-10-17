@@ -1,10 +1,7 @@
 import { edenTreaty } from "@elysiajs/eden";
 import { CONFIG } from "../../config";
 
-// Ensure that the server is running before running tests
-import mainInstance from "../../main";
+import type { Server } from "../../server";
 
-export type TestClient = ReturnType<typeof edenTreaty<typeof mainInstance>>;
-export const testClient: TestClient = edenTreaty<typeof mainInstance>(
-    `http://localhost:${CONFIG.port}`
-);
+export type TestClient = ReturnType<typeof edenTreaty<Server>>;
+export const testClient: TestClient = edenTreaty<Server>(`http://localhost:${CONFIG.testPort}`);

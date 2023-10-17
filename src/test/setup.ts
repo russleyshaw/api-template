@@ -1,6 +1,13 @@
-import { beforeAll } from "bun:test";
+import { beforeAll, afterAll } from "bun:test";
 import { LOGGER } from "../logger";
+import server from "../server";
+import { CONFIG } from "../config";
 
+LOGGER.level = "warn";
 beforeAll(async () => {
-    LOGGER.level = "warn";
+    server.listen(CONFIG.testPort);
+});
+
+afterAll(async () => {
+    await server.stop();
 });

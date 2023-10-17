@@ -1,4 +1,3 @@
-import { resolve } from "url";
 import { CONFIG } from "./config";
 import { LOGGER } from "./logger";
 
