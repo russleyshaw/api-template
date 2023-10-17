@@ -1,6 +1,6 @@
 import { beforeAll } from "bun:test";
 import { LOGGER } from "../logger";
 
-beforeAll(() => {
+beforeAll(async () => {
     LOGGER.level = "warn";
 });
