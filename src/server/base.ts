@@ -6,10 +6,14 @@ import errors from "./plugins/errors";
 import swagger from "./plugins/swagger";
 import debug from "./plugins/debug";
 
-export default new Elysia()
+const base = new Elysia({ name: "base" })
     .use(debug("Setting up base server"))
     .use(swagger)
     .use(errors)
     .use(logger)
     .use(requestId)
     .use(models);
+
+export type BaseServer = typeof base;
+
+export default base;

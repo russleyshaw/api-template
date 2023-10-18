@@ -1,20 +1,20 @@
-import { t } from "elysia";
+import { Type } from "@sinclair/typebox";
 
-export const PONG_SCHEMA = t.Object(
+export const PONG_SCHEMA = Type.Object(
     {
-        pong: t.String({
+        pong: Type.String({
             description: "Pong message",
         }),
     },
     {
         title: "Common.Pong",
         description: "Pong message",
-    }
+    },
 );
 
-const LinkSchema = (description: string) => t.String({ description });
+const LinkSchema = (description: string) => Type.String({ description });
 
-export const LINKS_SCHEMA = t.Object(
+export const LINKS_SCHEMA = Type.Object(
     {
         wiki: LinkSchema("Source of the service"),
         homepage: LinkSchema("Homepage of the service"),
@@ -26,29 +26,29 @@ export const LINKS_SCHEMA = t.Object(
     {
         title: "Common.Links",
         description: "Links of the service",
-    }
+    },
 );
 
-export const INFO_SCHEMA = t.Object(
+export const INFO_SCHEMA = Type.Object(
     {
-        name: t.String({
+        name: Type.String({
             description: "Name of the service",
         }),
 
-        version: t.String({
+        version: Type.String({
             description: "Version of the service",
         }),
 
-        description: t.String({
+        description: Type.String({
             description: "Description of the service",
         }),
 
-        author: t.Object({
-            name: t.String({
+        author: Type.Object({
+            name: Type.String({
                 description: "Author name",
             }),
 
-            email: t.String({
+            email: Type.String({
                 description: "Author email",
             }),
         }),
@@ -58,7 +58,7 @@ export const INFO_SCHEMA = t.Object(
     {
         title: "Common.Info",
         description: "Information about the service",
-    }
+    },
 );
 
 export const COMMON_SCHEMAS = {

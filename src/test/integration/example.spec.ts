@@ -10,7 +10,7 @@ describe("Example Controllers", () => {
     describe("GET /users", () => {
         it("should get users", async () => {
             const testUser = await createTestUser();
-            const resp = await testClient.user.get();
+            const resp = await testClient.users.get();
             expect(resp.status).toBe(200);
 
             const foundUser = resp.data?.find(user => user.id === testUser.id);
@@ -25,7 +25,7 @@ describe("Example Controllers", () => {
 
             const email = random(0, 1000000).toString();
 
-            const resp = await testClient.user.post({
+            const resp = await testClient.users.post({
                 name,
                 email,
             });
