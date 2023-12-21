@@ -5,5 +5,5 @@ export function safeParseInt(value: string | undefined, fallback?: number): numb
     }
 
     const parsed = parseInt(value);
-    return isNaN(parsed) ? fallback : parsed;
+    return Number.isNaN(parsed) ? fallback : parsed;
 }

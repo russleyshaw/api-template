@@ -9,3 +9,11 @@ export function expectThrow(cb: () => void) {
 
     return err;
 }
+
+export function expectExists<T>(value: T, msg?: string): NonNullable<T> {
+    if (value == null) {
+        throw new Error(msg ?? "Expected value to exist");
+    }
+
+    return value;
+}

@@ -1,13 +1,15 @@
-import { beforeAll, afterAll } from "bun:test";
+import { afterAll, beforeAll } from "bun:test";
+import { CONFIG } from "../config";
 import { LOGGER } from "../logger";
 import server from "../server";
-import { CONFIG } from "../config";
 
 LOGGER.level = "warn";
 beforeAll(async () => {
-    server.listen(CONFIG.testPort);
+    server.listen(CONFIG.testPort, () => {
+        LOGGER.info(`Test server listening on port ${CONFIG.testPort}`);
+    });
 });
 
 afterAll(async () => {
-    await server.stop();
+    await server.stop().catch(() => {});
 });

@@ -1,8 +1,11 @@
+import { eq } from "drizzle-orm";
 import createError from "http-errors";
-import { getDbClient } from "../db";
+import { readDb, writeDb } from "../db/conn";
+import { users } from "../db/schema";
+import { UserSchema } from "../schemas/example";
+import { BaseServer } from "../server/base";
 import log from "../server/plugins/debug";
 import { EXAMPLE_TAG } from "../tags";
-import { BaseServer } from "../server/base";
 
 export default (app: BaseServer) =>
     app
@@ -10,17 +13,19 @@ export default (app: BaseServer) =>
         .get(
             "/users",
             async () => {
-                const db = await getDbClient();
-                const foundUsers = await db.user.findMany();
-                return foundUsers.map(user => ({
-                    id: user.id,
-                    email: user.email ?? "",
-                    name: user.name,
-                    language: user.language ?? "",
-                }));
+                const db = readDb;
+                const foundUsers = await db.query.users.findMany();
+                return foundUsers.map(
+                    (user): UserSchema => ({
+                        id: user.id,
+                        email: user.email ?? "",
+                        name: user.name ?? undefined,
+                        language: user.language ?? "",
+                    }),
+                );
             },
             {
-                response: "USER_LIST_SCHEMA",
+                response: "UserListSchema",
                 detail: {
                     summary: "Get all users",
                     description: "Get all users",
@@ -31,36 +36,31 @@ export default (app: BaseServer) =>
         .post(
             "/users",
             async ({ body }) => {
-                const db = await getDbClient();
+                const db = writeDb;
 
-                const foundUser = await db.user.findUnique({
-                    where: {
+                const email = body.email.toLowerCase().trim();
+
+                const createdUsers = await db
+                    .insert(users)
+                    .values({
                         name: body.name,
-                    },
-                });
-
-                if (foundUser) {
-                    throw createError(409, `User with name (${body.name}) already exists`);
-                }
-
-                const createdUser = await db.user.create({
-                    data: {
-                        name: body.name,
-                        email: body.email,
+                        email: email,
                         language: body.language,
-                    },
-                });
+                    })
+                    .returning();
+
+                const createdUser = createdUsers[0];
 
                 return {
                     id: createdUser.id,
-                    name: createdUser.name,
+                    name: createdUser.name ?? undefined,
                     email: createdUser.email ?? "",
                     language: createdUser.language ?? "",
                 };
             },
             {
-                body: "NEW_USER_SCHEMA",
-                response: "USER_SCHEMA",
+                body: "NewUserSchema",
+                response: "UserSchema",
                 detail: {
                     summary: "Create new user",
                     description: "Create new user",

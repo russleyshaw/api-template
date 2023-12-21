@@ -1,43 +1,63 @@
-import { Type } from "@sinclair/typebox";
-import { encodeWithDefaults } from "./lib/typebox";
+import { Static, getSchemaValidator, t } from "elysia";
 import pkgJson from "../package.json";
-import { LINKS_SCHEMA } from "./schemas/common";
+import { expectExists } from "./lib/test";
 import { safeParseInt } from "./lib/util";
 
-const CONFIG_SCHEMA = Type.Object({
-    port: Type.Number({
-        minimum: 1,
-        maximum: 65535,
-        default: safeParseInt(Bun.env.PORT, 3000),
-        description: "Application port",
-    }),
-    testPort: Type.Number({
-        minimum: 1,
-        maximum: 65535,
-        default: safeParseInt(Bun.env.TEST_PORT, 3001),
-        description: "Application test port",
-    }),
+const ConfigFileSchema = t.Object({
+    port: t.Optional(
+        t.Number({
+            minimum: 1,
+            maximum: 65535,
+            description: "Application port",
+        }),
+    ),
+    testPort: t.Optional(
+        t.Number({
+            minimum: 1,
+            maximum: 65535,
+            description: "Application test port",
+        }),
+    ),
 
-    hostname: Type.String({
-        default: Bun.env.HOSTNAME ?? "localhost",
-        description: "Application hostname",
-    }),
+    hostname: t.Optional(
+        t.String({
+            description: "Application hostname",
+        }),
+    ),
 
-    devMode: Type.Boolean({
-        default: Bun.env.NODE_ENV === "development",
-        description: "Development mode",
-    }),
+    devMode: t.Optional(
+        t.Boolean({
+            description: "Development mode",
+        }),
+    ),
 
-    links: LINKS_SCHEMA,
+    dbUrl: t.Optional(
+        t.String({
+            description: "Database URL",
+        }),
+    ),
 });
+
+type ConfigFileSchema = Static<typeof ConfigFileSchema>;
 
 async function readConfig(configPath: string) {
     const config = Bun.file(configPath);
-    const configData = await config.json();
+    const configData = await config.json().catch(() => ({}));
 
-    const encoded = encodeWithDefaults(CONFIG_SCHEMA, configData);
+    const validator = getSchemaValidator(ConfigFileSchema, {})!;
+    const encoded = validator.Encode(configData) as ConfigFileSchema;
+
+    const dbUrl = expectExists(encoded.dbUrl ?? Bun.env.DB_URL, "Expected DB_URL to be set.");
+
     return {
-        ...encoded,
+        port: encoded.port ?? safeParseInt(Bun.env.PORT, 3000),
+        testPort: encoded.testPort ?? safeParseInt(Bun.env.TEST_PORT, 3001),
+        hostname: encoded.hostname ?? Bun.env.HOSTNAME ?? "127.0.0.1",
+        devMode: encoded.devMode ?? false,
+
+        readDbUrl: dbUrl,
+        writeDbUrl: dbUrl,
+
         appName: pkgJson.name,
         appDisplayName: pkgJson.displayName,
         appVersion: pkgJson.version,

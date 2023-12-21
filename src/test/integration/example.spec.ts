@@ -1,8 +1,10 @@
 import { afterAll, describe, expect, it } from "bun:test";
 import { random } from "lodash";
-import { getDbClient } from "../../db.js";
 import { expectToBeDefined } from "../util.js";
 import { testClient } from "./test_client.js";
+import { writeDb } from "../../db/conn.js";
+import { eq, inArray } from "drizzle-orm";
+import { users } from "../../db/schema.js";
 
 describe("Example Controllers", () => {
     afterAll(async () => deleteTestUsers());
@@ -23,7 +25,7 @@ describe("Example Controllers", () => {
             const name = "test";
             await tryDeleteTestUser(name);
 
-            const email = random(0, 1000000).toString();
+            const email = `${random(0, 1000000).toString()}@example.com`;
 
             const resp = await testClient.users.post({
                 name,
@@ -43,35 +45,26 @@ describe("Example Controllers", () => {
     const testUserIds = new Set<number>();
 
     async function tryDeleteTestUser(name: string) {
-        const db = await getDbClient();
-        await db.user.delete({
-            where: {
-                name,
-            },
-        });
+        const db = writeDb;
+        await db.delete(users).where(eq(users.name, name));
     }
 
     async function createTestUser() {
-        const db = await getDbClient();
-        const createdUser = await db.user.create({
-            data: {
+        const db = writeDb;
+        const createdUsers = await db
+            .insert(users)
+            .values({
                 name: "test",
                 email: "",
-            },
-        });
-        testUserIds.add(createdUser.id);
-        return createdUser;
+            })
+            .returning();
+        testUserIds.add(createdUsers[0].id);
+        return createdUsers[0];
     }
 
     async function deleteTestUsers() {
         const ids = Array.from(testUserIds).filter(id => id >= 0);
-        const db = await getDbClient();
-        await db.user.deleteMany({
-            where: {
-                id: {
-                    in: ids,
-                },
-            },
-        });
+        const db = writeDb;
+        await db.delete(users).where(inArray(users.id, ids));
     }
 });

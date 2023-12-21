@@ -1,7 +1,6 @@
 import swagger from "@elysiajs/swagger";
 import Elysia from "elysia";
 import { CONFIG } from "../../config";
-import * as md from "../../lib/markdown";
 import { ALL_TAGS } from "../../tags";
 import debug from "./debug";
 
@@ -28,15 +27,6 @@ export default (app: Elysia) => {
 
 async function getSwaggerDescription() {
     const readmeFile = Bun.file("./README.md");
-
-    return [
-        `> ${CONFIG.appDescription}`,
-        md.hr(),
-
-        await readmeFile.text(),
-
-        md.hr(),
-        md.h2("Links"),
-        ...Object.entries(CONFIG.links).map(([name, url]) => md.li(md.a(name, url))),
-    ].join("\n");
+    const text = await readmeFile.text();
+    return text;
 }

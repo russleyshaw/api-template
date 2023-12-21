@@ -1,7 +1,7 @@
 import { CONFIG } from "../config";
+import { BaseServer } from "../server/base";
 import log from "../server/plugins/debug";
 import { COMMON_TAG } from "../tags";
-import { BaseServer } from "../server/base";
 
 export default (app: BaseServer) =>
     app
@@ -17,11 +17,10 @@ export default (app: BaseServer) =>
                         name: CONFIG.appAuthorName,
                         email: CONFIG.appAuthorEmail,
                     },
-                    links: CONFIG.links,
                 };
             },
             {
-                response: "INFO_SCHEMA",
+                response: "InfoSchema",
                 detail: {
                     summary: "Get service info",
                     description: "Get service info",
@@ -35,7 +34,7 @@ export default (app: BaseServer) =>
                 return { pong: "pong" };
             },
             {
-                response: "PONG_SCHEMA",
+                response: "PongSchema",
                 detail: {
                     summary: "Ping",
                     description: "Ping the server",

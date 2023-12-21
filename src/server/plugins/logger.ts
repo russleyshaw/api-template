@@ -1,6 +1,6 @@
 import Elysia from "elysia";
-import { LOGGER } from "../../logger";
 import { BaseLogger } from "pino";
+import { LOGGER } from "../../logger";
 import debug from "./debug";
 
 export default new Elysia()

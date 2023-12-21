@@ -1,30 +1,32 @@
-import { t } from "elysia";
+import { Static, t } from "elysia";
 
-export const NEW_USER_SCHEMA = t.Object(
+export const NewUserSchema = t.Object(
     {
-        name: t.String({
-            description: "User name",
-        }),
-        email: t.Optional(
+        name: t.Optional(
             t.String({
-                description: "User email",
-            })
+                description: "User name",
+            }),
         ),
+        email: t.String({
+            description: "User email",
+        }),
+
         language: t.Optional(
             t.String({
                 description: "User language",
-            })
+            }),
         ),
     },
     {
         title: "Example.NewUser",
         description: "New user information",
-    }
+    },
 );
+export type NewUserSchema = Static<typeof NewUserSchema>;
 
-export const USER_SCHEMA = t.Composite(
+export const UserSchema = t.Composite(
     [
-        t.Required(NEW_USER_SCHEMA),
+        NewUserSchema,
         t.Object({
             id: t.Integer({
                 description: "User ID",
@@ -34,16 +36,18 @@ export const USER_SCHEMA = t.Composite(
     {
         title: "Example.User",
         description: "User information",
-    }
+    },
 );
+export type UserSchema = Static<typeof UserSchema>;
 
-export const USER_LIST_SCHEMA = t.Array(USER_SCHEMA, {
+export const UserListSchema = t.Array(UserSchema, {
     title: "Example.UserList",
     description: "List of users",
 });
+export type UserListSchema = Static<typeof UserListSchema>;
 
 export const EXAMPLE_SCHEMAS = {
-    NEW_USER_SCHEMA,
-    USER_SCHEMA,
-    USER_LIST_SCHEMA,
+    UserSchema,
+    NewUserSchema,
+    UserListSchema,
 };

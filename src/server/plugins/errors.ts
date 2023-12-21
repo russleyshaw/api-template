@@ -1,19 +1,18 @@
 import Elysia from "elysia";
 import { isHttpError } from "http-errors";
 
-import logger from "./logger";
-import debug from "./debug";
-import { Static, Type } from "@sinclair/typebox";
+import { Static, getSchemaValidator, t } from "elysia";
 import { CONFIG } from "../../config";
-import { Value } from "@sinclair/typebox/value";
 import { ElysiaErrorCode } from "../../lib/elysia";
+import debug from "./debug";
+import logger from "./logger";
 
-export const ERROR_RESPONSE_SCHEMA = Type.Object(
+export const ErrorResponse = t.Object(
     {
-        name: Type.String(),
-        message: Type.String(),
-        code: Type.Integer(),
-        stack: Type.Optional(Type.String()),
+        name: t.String(),
+        message: t.String(),
+        code: t.Integer(),
+        stack: t.Optional(t.String()),
     },
     {
         title: "Error Response",
@@ -21,11 +20,7 @@ export const ERROR_RESPONSE_SCHEMA = Type.Object(
     },
 );
 
-type ErrorResponse = Static<typeof ERROR_RESPONSE_SCHEMA>;
-
-export function isErrorResponse(value: unknown): value is ErrorResponse {
-    return Value.Encode(ERROR_RESPONSE_SCHEMA, value);
-}
+export type ErrorResponse = Static<typeof ErrorResponse>;
 
 export default new Elysia({ name: "errors" })
     .use(debug("Plugin: Setting up error handling"))
@@ -46,9 +41,9 @@ export default new Elysia({ name: "errors" })
 function castErrorResponse(error: unknown, code?: ElysiaErrorCode): ErrorResponse | undefined {
     if (error == null && code == null) return undefined;
 
-    let errorName: string = "UNKNOWN";
-    let errorMessage: string = "Unknown error";
-    let errorCode: number = 500;
+    let errorName = "UNKNOWN";
+    let errorMessage = "Unknown error";
+    let errorCode = 500;
     let errorStack: string | undefined = undefined;
 
     if (code === "NOT_FOUND") {

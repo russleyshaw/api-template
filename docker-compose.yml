@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+    # my-service:
+    #   build:
+    #     context: .
+    #   image: my-service
+    #   env_file:
+    #     - .env
+    #   ports:
+    #     - 3000:3000
+    #   restart: always
+
+    postgres:
+        image: postgres
+        restart: always
+        env_file:
+            - .env
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+
+volumes:
+    postgres_data:

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "bun:test";
-import Elysia from "elysia";
-import errors from "./errors";
-import createHttpError from "http-errors";
 import { Type } from "@sinclair/typebox";
+import Elysia from "elysia";
+import createHttpError from "http-errors";
+import errors from "./errors";
 
 const baseUrl = (path?: string) => `http://localhost${path}`;
 

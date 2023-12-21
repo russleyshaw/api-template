@@ -1,8 +1,8 @@
-import { expect, it, describe } from "bun:test";
-import { testClient } from "./test_client.js";
+import { describe, expect, it } from "bun:test";
 import { CONFIG } from "../../config.js";
+import { testClient } from "./test_client.js";
 
-describe("Commmon Controllers", () => {
+describe("Common Controllers", () => {
     describe("GET /ping", () => {
         it("should pong", async () => {
             const resp = await testClient.ping.get();

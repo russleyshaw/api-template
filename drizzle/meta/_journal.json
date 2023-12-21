@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1703126253455,
+      "tag": "0000_dashing_radioactive_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1703129397617,
+      "tag": "0001_soft_martin_li",
+      "breakpoints": true
+    }
+  ]
+}

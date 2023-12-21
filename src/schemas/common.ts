@@ -1,8 +1,8 @@
-import { Type } from "@sinclair/typebox";
+import { Static, t } from "elysia";
 
-export const PONG_SCHEMA = Type.Object(
+export const PongSchema = t.Object(
     {
-        pong: Type.String({
+        pong: t.String({
             description: "Pong message",
         }),
     },
@@ -11,58 +11,40 @@ export const PONG_SCHEMA = Type.Object(
         description: "Pong message",
     },
 );
+export type PongSchema = Static<typeof PongSchema>;
 
-const LinkSchema = (description: string) => Type.String({ description });
-
-export const LINKS_SCHEMA = Type.Object(
+export const InfoSchema = t.Object(
     {
-        wiki: LinkSchema("Source of the service"),
-        homepage: LinkSchema("Homepage of the service"),
-        issues: LinkSchema("Issues of the service"),
-        build: LinkSchema("Build of the service"),
-        documentation: LinkSchema("Docs of the service"),
-        source: LinkSchema("Source of the service"),
-    },
-    {
-        title: "Common.Links",
-        description: "Links of the service",
-    },
-);
-
-export const INFO_SCHEMA = Type.Object(
-    {
-        name: Type.String({
+        name: t.String({
             description: "Name of the service",
         }),
 
-        version: Type.String({
+        version: t.String({
             description: "Version of the service",
         }),
 
-        description: Type.String({
+        description: t.String({
             description: "Description of the service",
         }),
 
-        author: Type.Object({
-            name: Type.String({
+        author: t.Object({
+            name: t.String({
                 description: "Author name",
             }),
 
-            email: Type.String({
+            email: t.String({
                 description: "Author email",
             }),
         }),
-
-        links: LINKS_SCHEMA,
     },
     {
         title: "Common.Info",
         description: "Information about the service",
     },
 );
+export type InfoSchema = Static<typeof InfoSchema>;
 
 export const COMMON_SCHEMAS = {
-    PONG_SCHEMA,
-    LINKS_SCHEMA,
-    INFO_SCHEMA,
+    PongSchema,
+    InfoSchema,
 };
